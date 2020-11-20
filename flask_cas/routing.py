@@ -114,12 +114,10 @@ def validate(ticket):
     isValid = False
 
     try:
-        if current_app.config['CAS_SERVER'].lower().startswith('https://ssodev.'):
-            import ssl
-            unsafe_context = ssl._create_unverified_context()
-            xmldump = urlopen(cas_validate_url, context=unsafe_context).read().strip().decode('utf8', 'ignore')
-        else:
-            xmldump = urlopen(cas_validate_url).read().strip().decode('utf8', 'ignore')
+        import ssl
+        unsafe_context = ssl._create_unverified_context()
+        xmldump = urlopen(cas_validate_url, context=unsafe_context).read().strip().decode('utf8', 'ignore')
+        # xmldump = urlopen(cas_validate_url).read().strip().decode('utf8', 'ignore')
         xml_from_dict = parse(xmldump)
         isValid = True if "cas:authenticationSuccess" in xml_from_dict["cas:serviceResponse"] else False
     except ValueError:
